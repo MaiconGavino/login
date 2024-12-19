@@ -11,7 +11,7 @@ import (
 
 var DB *sql.DB
 
-func connectDB() {
+func ConnectDB() {
 
 	err := godotenv.Load()
 	if err != nil {
@@ -25,12 +25,12 @@ func connectDB() {
 	dbPort := os.Getenv("DB_PORT")
 	dbSSLMode := os.Getenv("DB_SSLMODE")
 
-	connStr := fmt.Sprintf("postgress://%s:%s@%s:%s/%s?sslmode=%s",
+	connStr := fmt.Sprintf("postgres://%s:%s@%s:%s/%s?sslmode=%s",
 		dbUser, dbPassword, dbHost, dbPort, dbName, dbSSLMode)
 
-	DB, err = sql.Open("postgres", connStr)
+	DB, err = sql.Open("pgx", connStr)
 	if err != nil {
-		log.Fatal("Error connecting to database")
+		log.Fatalf("Error connecting to database: %v", err)
 	}
 
 	err = DB.Ping()
