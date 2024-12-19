@@ -1,40 +1,50 @@
 <template>
-  <div class="container">
-    <div class="login">
-      <div class="lado-a">
-        <div class="login-container">
-          <h1 class="login-title">Acessar sua conta</h1>
-          <form class="login-form" @submit.prevent="handleLogin">
-            <label class="login-label" for="email">Email</label>
+  <div class="login-page">
+    <div class="left-panel">
+      <div class="logo-container">
+        <img class="logo" src="../assets/logo.png" alt="Logo">
+        <h1 class="app-name">AgroScan</h1>
+        <p class="tagline">identificação, classificação e manejo de pragas</p>
+        <p class="description">Sistema de visão computacional aplicado à identificação e recomendação de manejo de pragas para lavoura de cacau.</p>
+        <p class="version">Version 1.1</p>
+      </div>
+    </div>
+    <div class="right-panel">
+      <div class="login-container">
+        <h2 class="login-title">Login AgroScan</h2>
+        <p class="login-subtitle">Acessar sua conta.</p>
+        <form class="login-form" @submit.prevent="handleLogin">
+          <label class="login-label" for="email">Email</label>
+          <div class="input-container">
             <input
                 class="login-input"
                 id="email"
                 type="email"
                 v-model="email"
-                placeholder="Seu email"
+                placeholder="Seu e-mail..."
                 required
-            >
+            />
+          </div>
 
-            <label class="login-label" for="password">Senha</label>
+          <label class="login-label" for="password">Senha</label>
+          <div class="input-container">
             <input
                 class="login-input"
                 id="password"
                 type="password"
                 v-model="password"
-                placeholder="Sua senha"
+                placeholder="Sua Senha..."
                 required
-            >
+            />
+          </div>
 
-            <button class="login-button" type="submit">
-              Entrar
-            </button>
-          </form>
-          <p class="register-text">Ainda não tem conta? <a href="#" class="register-link">Registre-se</a></p>
-        </div>
-      </div>
-      <div class="lado-b">
-        <div class="img-container">
-          <img class="img" alt="Vue logo" src="../assets/login.png">
+          <button class="login-button" type="submit">
+            Entrar
+          </button>
+        </form>
+        <div class="signup-section">
+          <p>Ainda não tem conta?</p>
+          <a href="/register" class="signup-button">Registre-se</a>
         </div>
       </div>
     </div>
@@ -61,10 +71,13 @@ export default {
 </script>
 
 <style>
+/* Configuração global */
 html, body {
   margin: 0;
   padding: 0;
-  overflow-x: hidden; /* Impede rolagem horizontal */
+  width: 100%;
+  height: 100%;
+  overflow: hidden; /* Remove barras de rolagem */
   font-family: 'Helvetica Neue', Arial, sans-serif;
   background-color: #f6f6f6;
   color: #35495e;
@@ -75,44 +88,79 @@ html, body {
   box-sizing: inherit;
 }
 
-.container {
+/* Layout principal */
+.login-page {
+  display: flex; /* Alinha os painéis lado a lado */
+  flex-direction: row; /* Certifica-se de que os elementos fiquem lado a lado */
+  width: 100%;
+  height: 100vh; /* Ocupa a altura total da tela */
+}
+
+/* Divisão dos painéis */
+.left-panel,
+.right-panel {
+  flex: 1; /* Divide igualmente o espaço entre os painéis */
   display: flex;
   flex-direction: column;
-  min-height: 100vh; /* Garante que o footer fique ao final */
-}
-
-.login {
-  display: flex;
-  flex: 1; /* O login ocupa o espaço restante da tela */
-}
-
-.lado-a,
-.lado-b {
-  flex: 1; /* Divide o espaço igualmente, evitando largura fixa */
-  display: flex;
-  align-items: center;
   justify-content: center;
-  overflow: hidden;
-  background-color: #ffffff;
-  padding: 20px;
+  align-items: center;
 }
 
-.login-container {
-  background-color: #ffffff;
-  border: 1px solid #ccc;
-  border-radius: 8px;
+.left-panel {
+  background-color: #35495e;
+  color: #ffffff;
   padding: 40px;
+  text-align: center;
+}
+
+.right-panel {
+  background-color: #ffffff;
+  padding: 40px;
+}
+
+.logo {
+  width: 80px;
+  margin-bottom: 20px;
+}
+
+.app-name {
+  font-size: 2em;
+  font-weight: bold;
+  margin: 10px 0;
+}
+
+.tagline {
+  font-size: 1.2em;
+  margin-bottom: 10px;
+}
+
+.description {
+  font-size: 0.9em;
+  margin-bottom: 30px;
+}
+
+.version {
+  font-size: 0.8em;
+  color: #b0c4de;
+}
+
+/* Login container */
+.login-container {
+  max-width: 400px;
   width: 100%;
-  max-width: 380px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
 }
 
 .login-title {
-  margin: 0 0 20px;
-  text-align: center;
+  font-size: 1.8em;
+  font-weight: bold;
+  margin-bottom: 10px;
   color: #35495e;
-  font-size: 1.8em; /* Aumenta um pouco para melhor aproveitamento */
-  font-weight: 600;
+}
+
+.login-subtitle {
+  font-size: 1em;
+  margin-bottom: 20px;
+  color: #6c757d;
 }
 
 .login-form {
@@ -121,80 +169,82 @@ html, body {
 }
 
 .login-label {
+  font-size: 0.9em;
   margin-bottom: 5px;
-  font-weight: 500;
+  color: #495057;
+}
+
+.input-container {
+  position: relative;
+  margin-bottom: 20px;
 }
 
 .login-input {
+  width: 100%;
+  padding: 12px;
+  font-size: 1em;
   border: 1px solid #ccc;
   border-radius: 4px;
-  padding: 12px; /* Um pouco maior para mais conforto */
-  font-size: 1em;
-  margin-bottom: 15px;
   outline: none;
-  transition: border-color 0.2s;
 }
 
 .login-input:focus {
   border-color: #42b983;
 }
 
+.forgot-password {
+  font-size: 0.8em;
+  color: #42b983;
+  text-decoration: none;
+  position: absolute;
+  right: 5px;
+  bottom: 5px;
+}
+
 .login-button {
   background-color: #42b983;
+  color: #ffffff;
   border: none;
   border-radius: 4px;
-  padding: 14px; /* Botão mais alto */
-  color: #ffffff;
+  padding: 12px;
   font-size: 1em;
   cursor: pointer;
-  transition: background-color 0.2s;
-  font-weight: 500;
+  font-weight: bold;
+  transition: background-color 0.3s;
 }
 
 .login-button:hover {
   background-color: #369c6d;
 }
 
-.register-text {
-  margin-top: 20px;
+.signup-section {
   text-align: center;
-  font-size: 1em; /* Levemente maior para melhor leitura */
+  margin-top: 20px;
 }
 
-.register-link {
+.signup-button {
+  background-color: transparent;
   color: #42b983;
+  font-size: 0.9em;
+  border: 1px solid #42b983;
+  border-radius: 4px;
+  padding: 8px 12px;
   text-decoration: none;
-  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s;
 }
 
-.register-link:hover {
-  text-decoration: underline;
-}
-
-.img-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-.img {
-  background-color: #ffffff;
-  border-radius: 8px;
-  padding: 20px; /* Um padding menor para a imagem */
-  height: auto;
-  max-width: 80%; /* Reduz um pouco a imagem para não gerar scroll */
-  object-fit: contain;
+.signup-button:hover {
+  background-color: #42b983;
+  color: #ffffff;
 }
 
 .footer {
-  text-align: center; /* Centraliza o texto do rodapé */
-  padding: 20px;
-  font-size: 0.9em;
-  color: #35495e;
-}
-
-/* Código destacado */
-code {
-  color: #42b983;
+  text-align: center;
+  padding: 10px 20px;
+  font-size: 0.8em;
+  color: #6c757d;
+  background-color: #ffffff;
+  flex-shrink: 0; /* Impede que o rodapé "empurre" elementos para fora */
 }
 </style>
