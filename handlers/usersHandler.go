@@ -31,39 +31,38 @@ type RegisterResponse struct {
 
 // LoginHandler realiza a autenticação do usuário
 func LoginHandler(w http.ResponseWriter, r *http.Request) {
-	// Verifica se o método é POST
 	if r.Method != http.MethodPost {
 		http.Error(w, "Método não permitido", http.StatusMethodNotAllowed)
 		return
 	}
 
-	// Decodifica os dados do corpo da requisição
 	var loginReq LoginRequest
 	if err := json.NewDecoder(r.Body).Decode(&loginReq); err != nil {
+		log.Printf("Erro ao decodificar JSON: %v", err)
 		http.Error(w, "Erro ao processar dados", http.StatusBadRequest)
 		return
 	}
+	log.Printf("Tentativa de login com o email: %s", loginReq.Email)
 
-	// Busca o usuário no banco de dados
 	var user models.User
 	err := config.DB.QueryRow("SELECT id, email, password FROM users WHERE email = $1", loginReq.Email).Scan(&user.ID, &user.Email, &user.Password)
 	if err == sql.ErrNoRows {
+		log.Println("Usuário não encontrado")
 		http.Error(w, "Email ou senha incorretos", http.StatusUnauthorized)
 		return
 	} else if err != nil {
+		log.Printf("Erro ao buscar usuário no banco: %v", err)
 		http.Error(w, "Erro interno", http.StatusInternalServerError)
-		log.Printf("Erro ao buscar usuário: %v", err)
 		return
 	}
 
-	// Verifica a senha
 	err = bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(loginReq.Password))
 	if err != nil {
+		log.Println("Senha incorreta")
 		http.Error(w, "Email ou senha incorretos", http.StatusUnauthorized)
 		return
 	}
 
-	// Responde com sucesso
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(LoginResponse{Message: "Login realizado com sucesso"})
 }

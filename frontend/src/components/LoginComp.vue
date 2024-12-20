@@ -4,24 +4,27 @@
       <div class="logo-container">
         <img class="logo" src="../assets/logo.png" alt="Logo">
         <h1 class="app-name">AgroScan</h1>
-        <p class="tagline">identificação, classificação e manejo de pragas</p>
-        <p class="description">Sistema de visão computacional aplicado à identificação e recomendação de manejo de pragas para lavoura de cacau.</p>
+        <p class="tagline">Identificação, classificação e manejo de pragas</p>
+        <p class="description">
+          Sistema de visão computacional aplicado à identificação e recomendação de manejo de pragas para lavoura de cacau.
+        </p>
         <p class="version">Version 1.1</p>
       </div>
     </div>
     <div class="right-panel">
       <div class="login-container">
         <h2 class="login-title">Login AgroScan</h2>
-        <p class="login-subtitle">Acessar sua conta.</p>
-        <form class="login-form" @submit.prevent="handleLogin">
+        <p class="login-subtitle">Acesse sua conta.</p>
+        <form class="login-form" @submit.prevent="login">
           <label class="login-label" for="email">Email</label>
           <div class="input-container">
             <input
                 class="login-input"
                 id="email"
                 type="email"
-                v-model="email"
+                v-model="form.email"
                 placeholder="Seu e-mail..."
+                aria-label="Email"
                 required
             />
           </div>
@@ -32,19 +35,21 @@
                 class="login-input"
                 id="password"
                 type="password"
-                v-model="password"
-                placeholder="Sua Senha..."
+                v-model="form.password"
+                placeholder="Sua senha..."
+                aria-label="Senha"
                 required
             />
           </div>
 
-          <button class="login-button" type="submit">
-            Entrar
+          <button class="login-button" type="submit" :disabled="loading">
+            <span v-if="loading">Carregando...</span>
+            <span v-else>Entrar</span>
           </button>
         </form>
         <div class="signup-section">
           <p>Ainda não tem conta?</p>
-          <a href="/register" class="signup-button">Registre-se</a>
+          <a href="/register" class="signup-button" @click="register">Registre-se</a>
         </div>
       </div>
     </div>
@@ -55,51 +60,80 @@
 </template>
 
 <script>
+import axios from "axios";
+
 export default {
   data() {
     return {
-      email: '',
-      password: ''
-    }
+      form: {
+        email: "",
+        password: "",
+      },
+      loading: false,
+    };
   },
+
   methods: {
-    handleLogin() {
-      console.log('Email:', this.email, 'Senha:', this.password)
-    }
-  }
-}
+    async login() {
+      this.loading = true;
+      try {
+        const response = await axios.post("http://localhost:8080/", {
+          email: this.form.email,
+          password: this.form.password,
+        });
+
+        if (response.status === 200) {
+          alert("Login realizado com sucesso!");
+          this.$router.push("/");
+        }
+      } catch (error) {
+        console.error("Erro ao realizar login:", error.response || error.message);
+        alert("Erro ao realizar login. Verifique suas credenciais.");
+      } finally {
+        this.loading = false;
+      }
+    },
+
+    register() {
+      this.$router.push("/register");
+    },
+  },
+};
 </script>
 
 <style>
 /* Configuração global */
-html, body {
+html,
+body {
   margin: 0;
   padding: 0;
   width: 100%;
   height: 100%;
-  overflow: hidden; /* Remove barras de rolagem */
-  font-family: 'Helvetica Neue', Arial, sans-serif;
+  overflow: hidden;
+  font-family: "Helvetica Neue", Arial, sans-serif;
   background-color: #f6f6f6;
   color: #35495e;
   box-sizing: border-box;
 }
 
-*, *::before, *::after {
+*,
+*::before,
+*::after {
   box-sizing: inherit;
 }
 
 /* Layout principal */
 .login-page {
-  display: flex; /* Alinha os painéis lado a lado */
-  flex-direction: row; /* Certifica-se de que os elementos fiquem lado a lado */
+  display: flex;
+  flex-direction: row;
   width: 100%;
-  height: 100vh; /* Ocupa a altura total da tela */
+  height: 100vh;
 }
 
 /* Divisão dos painéis */
 .left-panel,
 .right-panel {
-  flex: 1; /* Divide igualmente o espaço entre os painéis */
+  flex: 1;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -192,15 +226,6 @@ html, body {
   border-color: #42b983;
 }
 
-.forgot-password {
-  font-size: 0.8em;
-  color: #42b983;
-  text-decoration: none;
-  position: absolute;
-  right: 5px;
-  bottom: 5px;
-}
-
 .login-button {
   background-color: #42b983;
   color: #ffffff;
@@ -245,6 +270,6 @@ html, body {
   font-size: 0.8em;
   color: #6c757d;
   background-color: #ffffff;
-  flex-shrink: 0; /* Impede que o rodapé "empurre" elementos para fora */
+  flex-shrink: 0;
 }
 </style>
