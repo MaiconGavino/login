@@ -5,6 +5,8 @@ export default {
   data() {
     return {
       form: {
+        name: "",
+        phone: "",
         email: "",
         password: "",
       },
