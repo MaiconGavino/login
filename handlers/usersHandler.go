@@ -98,7 +98,7 @@ func RegisterHandler(w http.ResponseWriter, r *http.Request) {
 		log.Printf("Erro ao inserir usuário: %v", err)
 		return
 	}
-
+	log.Printf("email e senha", registerReq.Email, registerReq.Password)
 	// Responde com sucesso
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(RegisterResponse{Message: "Usuário registrado com sucesso"})

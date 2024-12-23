@@ -49,7 +49,7 @@
         </form>
         <div class="signup-section">
           <p>Ainda não tem conta?</p>
-          <a href="/register" class="signup-button" @click="register">Registre-se</a>
+          <a href="/register" class="signup-button">Registre-se</a>
         </div>
       </div>
     </div>
