@@ -46,6 +46,18 @@ export default {
           />
         </div>
         <div class="input-container">
+          <label class="register-label" for="phone">Telefone</label>
+          <input
+            type="tel"
+            name="phone"
+            id="phone"
+            v-model="form.phone"
+            placeholder="Seu Telefone..."
+            required
+            class="register-input"
+          />
+        </div>
+        <div class="input-container">
           <label class="register-label" for="email">Email</label>
           <input
               type="email"
