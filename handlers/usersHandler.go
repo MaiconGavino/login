@@ -21,6 +21,8 @@ type LoginResponse struct {
 }
 
 type RegisterRequest struct {
+	Name     string `json:"name"`
+	Phone    string `json:"phone"`
 	Email    string `json:"email"`
 	Password string `json:"password"`
 }
@@ -91,14 +93,14 @@ func RegisterHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Insere o novo usuário no banco de dados
-	query := "INSERT INTO users (email, password) VALUES ($1, $2)"
-	_, err = config.DB.Exec(query, registerReq.Email, string(hashedPassword))
+	query := "INSERT INTO users (name, phone, email, password) VALUES ($1, $2, $3, $4)"
+	_, err = config.DB.Exec(query, registerReq.Name, registerReq.Phone, registerReq.Email, string(hashedPassword))
 	if err != nil {
 		http.Error(w, "Erro ao salvar usuário", http.StatusInternalServerError)
 		log.Printf("Erro ao inserir usuário: %v", err)
 		return
 	}
-	log.Printf("email e senha", registerReq.Email, registerReq.Password)
+	//log.Printf("email e senha", registerReq.Email, registerReq.Password)
 	// Responde com sucesso
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(RegisterResponse{Message: "Usuário registrado com sucesso"})
